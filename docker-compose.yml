@@ -1,0 +1,198 @@
+version: '3.8'
+
+services:
+  # Kafka for event streaming
+  kafka:
+    image: bitnami/kafka:4.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    networks:
+      - flink-network
+  
+  # Kafka initialization
+  kafka-setup:
+    image: bitnami/kafka:4.0
+    container_name: kafka-setup
+    depends_on:
+      - kafka
+    command: >
+      bash -c "
+        echo 'Waiting for Kafka to be ready...' &&
+        sleep 30 &&
+        kafka-topics.sh --create --if-not-exists --bootstrap-server kafka:9092 --replication-factor 1 --partitions 4 --topic ad-impressions &&
+        kafka-topics.sh --create --if-not-exists --bootstrap-server kafka:9092 --replication-factor 1 --partitions 4 --topic ad-clicks &&
+        kafka-topics.sh --create --if-not-exists --bootstrap-server kafka:9092 --replication-factor 1 --partitions 4 --topic ctr-metrics &&
+        kafka-topics.sh --create --if-not-exists --bootstrap-server kafka:9092 --replication-factor 1 --partitions 4 --topic unique-users-metrics &&
+        kafka-topics.sh --create --if-not-exists --bootstrap-server kafka:9092 --replication-factor 1 --partitions 4 --topic revenue-metrics &&
+        kafka-topics.sh --create --if-not-exists --bootstrap-server kafka:9092 --replication-factor 1 --partitions 4 --topic ctr-anomalies &&
+        echo 'Kafka topics created.'
+      "
+    networks:
+      - flink-network
+
+  # Data Generator
+  data-generator:
+    build:
+      context: ./data-generator
+      dockerfile: Dockerfile
+    container_name: data-generator
+    restart: on-failure:3
+    depends_on:
+      - kafka-setup
+    environment:
+      - KAFKA_BROKER=kafka:9092
+      - IMPRESSION_TOPIC=ad-impressions
+      - CLICK_TOPIC=ad-clicks
+      - EVENT_RATE=50  # Events per second
+      - CLICK_RATIO=0.1  # 10% of impressions get clicks
+    networks:
+      - flink-network
+
+  sql-client:
+    build: ./flink
+    hostname: sql-client
+    container_name: sql-client
+    depends_on:
+      - jobmanager
+    environment:
+    - |
+      FLINK_PROPERTIES=
+      jobmanager.rpc.address: jobmanager
+      rest.address: jobmanager
+    command: >
+      bash -c "sleep infinity"
+    volumes:
+      - ./jobs/sql/:/opt/flink/sql/
+    networks:
+      - flink-network
+
+  jobmanager:
+    build: ./flink
+    hostname: jobmanager
+    container_name: jobmanager
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    volumes:
+      - flink_data:/tmp/
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        state.backend: filesystem
+        state.checkpoints.dir: file:///tmp/flink-checkpoints
+    healthcheck:
+      test: [ "CMD", "bin/flink", "list" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 5s
+    networks:
+      - flink-network
+
+  taskmanager:
+    build: ./flink
+    hostname: taskmanager
+    container_name: taskmanager
+    depends_on:
+    - jobmanager
+    command: taskmanager
+    volumes:
+      - flink_data:/tmp/
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 16
+        state.backend: filesystem
+        state.checkpoints.dir: file:///tmp/flink-checkpoints
+    healthcheck:
+      test: [ "CMD", "grep", "Successful registration at resource manager", "-r", "/opt/flink/log/" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 5s
+    networks:
+      - flink-network
+  
+  elasticsearch:
+    image: elastic/elasticsearch:7.17.9
+    hostname: elasticsearch
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    networks:
+      - flink-network
+
+  kibana:
+    build: ./kibana
+    hostname: kibana
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./kibana/dashboard.ndjson:/usr/share/kibana/dashboard.ndjson
+      - ./kibana/setup.sh:/usr/share/kibana/setup.sh
+    networks:
+      - flink-network
+
+  # UI kafka viewer. Availabe on localhost:20065
+  console:
+    container_name: redpanda-console
+    image: docker.redpanda.com/redpandadata/console:latest
+    networks:
+      - flink-network
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml && /app/console'
+    environment:
+      CONFIG_FILEPATH: ${CONFIG_FILEPATH:-/tmp/config.yml}
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["kafka:9092"]
+    # healthcheck:
+    #   test: [ "CMD", "grep", "Kafka Server started", "-r", "/opt/flink/log/" ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 10
+    #   start_period: 5s
+    ports:
+      - 20065:8080
+    depends_on:
+      - kafka-setup
+
+networks:
+  flink-network:
+    driver: bridge
+
+volumes:
+  kafka_data:
+    driver: local
+  flink_data:
+    driver: local
