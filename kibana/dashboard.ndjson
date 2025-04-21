@@ -1,4 +1,88 @@
-{"attributes":{"fieldAttrs":"{}","fields":"[]","runtimeFieldMap":"{}","timeFieldName":"window_start","title":"ctr_metrics","typeMeta":"{}"},"coreMigrationVersion":"7.17.16","id":"0aaca260-1ec2-11f0-81f5-6bb97eff8ee7","migrationVersion":{"index-pattern":"7.11.0"},"references":[],"type":"index-pattern","updated_at":"2025-04-21T15:05:20.006Z","version":"WzI0LDFd"}
-{"attributes":{"description":"","kibanaSavedObjectMeta":{"searchSourceJSON":"{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[],\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\"}"},"title":"CTR per Campaign by Time","uiStateJSON":"{}","version":1,"visState":"{\"title\":\"CTR per Campaign by Time\",\"type\":\"line\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"avg\",\"params\":{\"field\":\"ctr\"},\"schema\":\"metric\"},{\"id\":\"2\",\"enabled\":true,\"type\":\"date_histogram\",\"params\":{\"field\":\"window_start\",\"timeRange\":{\"from\":\"now-1h\",\"to\":\"now\"},\"useNormalizedEsInterval\":true,\"scaleMetricValues\":false,\"interval\":\"auto\",\"used_interval\":\"1m\",\"drop_partials\":false,\"min_doc_count\":1,\"extended_bounds\":{}},\"schema\":\"segment\"},{\"id\":\"3\",\"enabled\":true,\"type\":\"terms\",\"params\":{\"field\":\"campaign_id.keyword\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":5,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"},\"schema\":\"group\"}],\"params\":{\"type\":\"line\",\"grid\":{\"categoryLines\":false},\"categoryAxes\":[{\"id\":\"CategoryAxis-1\",\"type\":\"category\",\"position\":\"bottom\",\"show\":true,\"scale\":{\"type\":\"linear\"},\"labels\":{\"show\":true,\"filter\":true,\"truncate\":100},\"title\":{},\"style\":{}}],\"valueAxes\":[{\"id\":\"ValueAxis-1\",\"name\":\"LeftAxis-1\",\"type\":\"value\",\"position\":\"left\",\"show\":true,\"scale\":{\"type\":\"linear\",\"mode\":\"normal\"},\"labels\":{\"show\":true,\"rotate\":0,\"filter\":false,\"truncate\":100},\"title\":{\"text\":\"Average ctr\"},\"style\":{}}],\"seriesParams\":[{\"show\":true,\"type\":\"line\",\"mode\":\"normal\",\"data\":{\"label\":\"Average ctr\",\"id\":\"1\"},\"valueAxis\":\"ValueAxis-1\",\"drawLinesBetweenPoints\":true,\"lineWidth\":2,\"interpolate\":\"linear\",\"showCircles\":true,\"circlesRadius\":1}],\"addTooltip\":true,\"detailedTooltip\":true,\"palette\":{\"type\":\"palette\",\"name\":\"default\"},\"addLegend\":true,\"legendPosition\":\"right\",\"fittingFunction\":\"linear\",\"times\":[],\"addTimeMarker\":false,\"truncateLegend\":true,\"maxLegendLines\":1,\"labels\":{},\"radiusRatio\":9,\"thresholdLine\":{\"show\":false,\"value\":10,\"width\":1,\"style\":\"full\",\"color\":\"#E7664C\"}}}"},"coreMigrationVersion":"7.17.16","id":"86342400-1ec5-11f0-81f5-6bb97eff8ee7","migrationVersion":{"visualization":"7.17.0"},"references":[{"id":"0aaca260-1ec2-11f0-81f5-6bb97eff8ee7","name":"kibanaSavedObjectMeta.searchSourceJSON.index","type":"index-pattern"}],"type":"visualization","updated_at":"2025-04-21T15:30:15.744Z","version":"WzI2OSwxXQ=="}
-{"attributes":{"description":"","hits":0,"kibanaSavedObjectMeta":{"searchSourceJSON":"{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"},"optionsJSON":"{\"useMargins\":true,\"syncColors\":false,\"hidePanelTitles\":false}","panelsJSON":"[{\"version\":\"7.17.16\",\"type\":\"visualization\",\"gridData\":{\"x\":0,\"y\":0,\"w\":48,\"h\":16,\"i\":\"fb67f946-3ffc-4362-a26e-ed9a0ca10060\"},\"panelIndex\":\"fb67f946-3ffc-4362-a26e-ed9a0ca10060\",\"embeddableConfig\":{\"enhancements\":{}},\"panelRefName\":\"panel_fb67f946-3ffc-4362-a26e-ed9a0ca10060\"}]","refreshInterval":{"pause":true,"value":0},"timeFrom":"now-1h","timeRestore":true,"timeTo":"now","title":"CTR per Campaign by Time Dashboard","version":1},"coreMigrationVersion":"7.17.16","id":"b75fe0f0-1ec5-11f0-81f5-6bb97eff8ee7","migrationVersion":{"dashboard":"7.17.3"},"references":[{"id":"86342400-1ec5-11f0-81f5-6bb97eff8ee7","name":"fb67f946-3ffc-4362-a26e-ed9a0ca10060:panel_fb67f946-3ffc-4362-a26e-ed9a0ca10060","type":"visualization"}],"type":"dashboard","updated_at":"2025-04-21T15:32:11.578Z","version":"WzMwNywxXQ=="}
-{"excludedObjects":[],"excludedObjectsCount":0,"exportedCount":3,"missingRefCount":0,"missingReferences":[]}
+{
+    "attributes": {
+        "fieldAttrs": "{}",
+        "fields": "[]",
+        "runtimeFieldMap": "{}",
+        "timeFieldName": "window_start",
+        "title": "ctr_metrics",
+        "typeMeta": "{}"
+    },
+    "coreMigrationVersion": "7.17.16",
+    "id": "0aaca260-1ec2-11f0-81f5-6bb97eff8ee7",
+    "migrationVersion": {
+        "index-pattern": "7.11.0"
+    },
+    "references": [],
+    "type": "index-pattern",
+    "updated_at": "2025-04-21T15:05:20.006Z",
+    "version": "WzI0LDFd"
+}
+{
+    "attributes": {
+        "description": "",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[],\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\"}"
+        },
+        "title": "CTR per Campaign by Time",
+        "uiStateJSON": "{}",
+        "version": 1,
+        "visState": "{\"title\":\"CTR per Campaign by Time\",\"type\":\"line\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"avg\",\"params\":{\"field\":\"ctr\"},\"schema\":\"metric\"},{\"id\":\"2\",\"enabled\":true,\"type\":\"date_histogram\",\"params\":{\"field\":\"window_start\",\"timeRange\":{\"from\":\"now-1h\",\"to\":\"now\"},\"useNormalizedEsInterval\":true,\"scaleMetricValues\":false,\"interval\":\"auto\",\"used_interval\":\"1m\",\"drop_partials\":false,\"min_doc_count\":1,\"extended_bounds\":{}},\"schema\":\"segment\"},{\"id\":\"3\",\"enabled\":true,\"type\":\"terms\",\"params\":{\"field\":\"campaign_id.keyword\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":5,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"},\"schema\":\"group\"}],\"params\":{\"type\":\"line\",\"grid\":{\"categoryLines\":false},\"categoryAxes\":[{\"id\":\"CategoryAxis-1\",\"type\":\"category\",\"position\":\"bottom\",\"show\":true,\"scale\":{\"type\":\"linear\"},\"labels\":{\"show\":true,\"filter\":true,\"truncate\":100},\"title\":{},\"style\":{}}],\"valueAxes\":[{\"id\":\"ValueAxis-1\",\"name\":\"LeftAxis-1\",\"type\":\"value\",\"position\":\"left\",\"show\":true,\"scale\":{\"type\":\"linear\",\"mode\":\"normal\"},\"labels\":{\"show\":true,\"rotate\":0,\"filter\":false,\"truncate\":100},\"title\":{\"text\":\"Average ctr\"},\"style\":{}}],\"seriesParams\":[{\"show\":true,\"type\":\"line\",\"mode\":\"normal\",\"data\":{\"label\":\"Average ctr\",\"id\":\"1\"},\"valueAxis\":\"ValueAxis-1\",\"drawLinesBetweenPoints\":true,\"lineWidth\":2,\"interpolate\":\"linear\",\"showCircles\":true,\"circlesRadius\":1}],\"addTooltip\":true,\"detailedTooltip\":true,\"palette\":{\"type\":\"palette\",\"name\":\"default\"},\"addLegend\":true,\"legendPosition\":\"right\",\"fittingFunction\":\"linear\",\"times\":[],\"addTimeMarker\":false,\"truncateLegend\":true,\"maxLegendLines\":1,\"labels\":{},\"radiusRatio\":9,\"thresholdLine\":{\"show\":false,\"value\":10,\"width\":1,\"style\":\"full\",\"color\":\"#E7664C\"}}}"
+    },
+    "coreMigrationVersion": "7.17.16",
+    "id": "86342400-1ec5-11f0-81f5-6bb97eff8ee7",
+    "migrationVersion": {
+        "visualization": "7.17.0"
+    },
+    "references": [
+        {
+            "id": "0aaca260-1ec2-11f0-81f5-6bb97eff8ee7",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+            "type": "index-pattern"
+        }
+    ],
+    "type": "visualization",
+    "updated_at": "2025-04-21T15:30:15.744Z",
+    "version": "WzI2OSwxXQ=="
+}
+{
+    "attributes": {
+        "description": "",
+        "hits": 0,
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+        },
+        "optionsJSON": "{\"useMargins\":true,\"syncColors\":false,\"hidePanelTitles\":false}",
+        "panelsJSON": "[{\"version\":\"7.17.16\",\"type\":\"visualization\",\"gridData\":{\"x\":0,\"y\":0,\"w\":48,\"h\":16,\"i\":\"fb67f946-3ffc-4362-a26e-ed9a0ca10060\"},\"panelIndex\":\"fb67f946-3ffc-4362-a26e-ed9a0ca10060\",\"embeddableConfig\":{\"enhancements\":{}},\"panelRefName\":\"panel_fb67f946-3ffc-4362-a26e-ed9a0ca10060\"}]",
+        "refreshInterval": {
+            "pause": true,
+            "value": 0
+        },
+        "timeFrom": "now-1h",
+        "timeRestore": true,
+        "timeTo": "now",
+        "title": "CTR per Campaign by Time Dashboard",
+        "version": 1
+    },
+    "coreMigrationVersion": "7.17.16",
+    "id": "b75fe0f0-1ec5-11f0-81f5-6bb97eff8ee7",
+    "migrationVersion": {
+        "dashboard": "7.17.3"
+    },
+    "references": [
+        {
+            "id": "86342400-1ec5-11f0-81f5-6bb97eff8ee7",
+            "name": "fb67f946-3ffc-4362-a26e-ed9a0ca10060:panel_fb67f946-3ffc-4362-a26e-ed9a0ca10060",
+            "type": "visualization"
+        }
+    ],
+    "type": "dashboard",
+    "updated_at": "2025-04-21T15:32:11.578Z",
+    "version": "WzMwNywxXQ=="
+}
+{
+    "excludedObjects": [],
+    "excludedObjectsCount": 0,
+    "exportedCount": 3,
+    "missingRefCount": 0,
+    "missingReferences": []
+}

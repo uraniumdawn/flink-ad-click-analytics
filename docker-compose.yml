@@ -163,7 +163,7 @@ services:
     networks:
       - flink-network
 
-  # UI kafka viewer. Availabe on localhost:20065
+  # UI kafka viewer. Available on localhost:20065
   console:
     container_name: redpanda-console
     image: docker.redpanda.com/redpandadata/console:latest
