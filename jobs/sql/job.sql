@@ -76,7 +76,7 @@ GROUP BY
     i.window_start,
     i.window_end;
 -- -----------------------------------------------------------------------------------------------------------------------------
--- Calculatin revenue by campaign
+-- Calculating revenue by campaign
 -- 1. Join Windowed Impression with Windowed Click by impression_id;
 -- 2. Group by campaign_id, device_type and windowed timestamps;
 -- 3. Sum the cost of each clicked ad;
