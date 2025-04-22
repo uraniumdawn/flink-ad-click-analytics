@@ -1,7 +1,7 @@
 # Ad Click Analytics: Real-Time CTR Data Pipeline
 
-This project sets up a complete **real-time analytics pipeline** using **Apache Flink**, **Kafka**, **Elasticsearch**, and **Kibana**.
-The pipeline computes **Click-Through Rate (CTR)** 
+This project sets up a complete real-time analytics pipeline using Apache Flink, Kafka, Elasticsearch, and Kibana.
+The pipeline computes Click-Through Rate (CTR)
 for ad campaigns, unique users, revenue and detects CTR anomalies in 1-minute windows.
 ---
 
@@ -77,7 +77,7 @@ The Flink jobs:
 ## Kibana Dashboard
 
 ### Dashboard Features:
-- Dashboard available on this [link](http://localhost:5601/app/dashboards#/view/b75fe0f0-1ec5-11f0-81f5-6bb97eff8ee7?_g=(filters:!())
+- [View Dashboard in Kibana](http://localhost:5601/app/dashboards#/view/b75fe0f0-1ec5-11f0-81f5-6bb97eff8ee7?_g=%28filters:!%28%29%29)
 - CTR per campaign plotted over 1-minute windows
 - Time window filters (e.g., “Last 1 hour”)
 - Dashboard and index pattern are **auto-imported** during startup
