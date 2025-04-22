@@ -62,24 +62,6 @@ services:
     networks:
       - flink-network
 
-  sql-client:
-    build: ./flink
-    hostname: sql-client
-    container_name: sql-client
-    depends_on:
-      - jobmanager
-    environment:
-    - |
-      FLINK_PROPERTIES=
-      jobmanager.rpc.address: jobmanager
-      rest.address: jobmanager
-    command: >
-      bash -c "sleep infinity"
-    volumes:
-      - ./jobs/sql/:/opt/flink/sql/
-    networks:
-      - flink-network
-
   jobmanager:
     build: ./flink
     hostname: jobmanager
@@ -89,6 +71,7 @@ services:
     command: jobmanager
     volumes:
       - flink_data:/tmp/
+      - ./jobs/sql/:/opt/flink/sql/
     environment:
       - |
         FLINK_PROPERTIES=
@@ -176,14 +159,8 @@ services:
       CONSOLE_CONFIG_FILE: |
         kafka:
           brokers: ["kafka:9092"]
-    # healthcheck:
-    #   test: [ "CMD", "grep", "Kafka Server started", "-r", "/opt/flink/log/" ]
-    #   interval: 10s
-    #   timeout: 10s
-    #   retries: 10
-    #   start_period: 5s
     ports:
-      - 20065:8080
+      - "20065:8080"
     depends_on:
       - kafka-setup
 

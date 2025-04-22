@@ -77,13 +77,14 @@ The Flink jobs:
 ## Kibana Dashboard
 
 ### Dashboard Features:
+- Dashboard available on this [link](http://localhost:5601/app/dashboards#/view/b75fe0f0-1ec5-11f0-81f5-6bb97eff8ee7?_g=(filters:!())
 - CTR per campaign plotted over 1-minute windows
 - Time window filters (e.g., “Last 1 hour”)
 - Dashboard and index pattern are **auto-imported** during startup
 ---
 
 ## Notes
-
+- **There might need some time while data is arrived into Elasticsearch and be reflected on the Dashboard**
 - Flink job emits CTR metrics with timestamp fields `window_start` and `window_end`
 - Elasticsearch auto-mapping converts ISO timestamps correctly
 - All time series analysis is based on `window_start` field
