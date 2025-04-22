@@ -1,6 +1,7 @@
 SET 'sql-client.execution.result-mode'='table';
 SET 'execution.runtime-mode'='streaming';
 SET 'table.exec.state.ttl'='600000';
+SET 'parallelism.default' = '4';
 
 -- Define available database
 CREATE DATABASE ad_metrics;

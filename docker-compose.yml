@@ -99,7 +99,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 16
+        taskmanager.numberOfTaskSlots: 36
         state.backend: filesystem
         state.checkpoints.dir: file:///tmp/flink-checkpoints
     healthcheck:
