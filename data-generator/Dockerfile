@@ -8,8 +8,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy data generator script
 COPY generate_events.py .
+COPY setup.sh .
 
 # Make script executable
 RUN chmod +x generate_events.py
 
-CMD ["python", "generate_events.py"]
+CMD ["./setup.sh"]

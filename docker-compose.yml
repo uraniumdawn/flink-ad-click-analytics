@@ -50,7 +50,6 @@ services:
       context: ./data-generator
       dockerfile: Dockerfile
     container_name: data-generator
-    restart: on-failure:3
     depends_on:
       - kafka-setup
     environment:
@@ -159,6 +158,12 @@ services:
       CONSOLE_CONFIG_FILE: |
         kafka:
           brokers: ["kafka:9092"]
+          startup:
+            maxRetries: 5
+            retryInterval: 1s
+            maxRetryInterval: 60s
+            backoffMultiplier: 2
+    restart: on-failure
     ports:
       - "20065:8080"
     depends_on:
